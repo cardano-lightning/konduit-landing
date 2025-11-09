@@ -265,9 +265,12 @@
           font-size: 1.3rem;
         }
         .hero-content {
-          aspect-ratio: auto; /* Break aspect ratio on small screens */
-          border-radius: 20px; /* Use a standard card shape */
-          min-height: 50vh;
+          aspect-ratio: 1/1;
+          border-radius: 100%; /* Use a standard card shape */
+          display: flex;
+          flex-direction: column;
+          justify-content: center; /* Centered content */
+          align-items: center;
         }
         .content-section h2 {
           font-size: 2rem;
@@ -325,19 +328,22 @@
         id="what-is"
         class="content-section"
         style="
-          min-height: 80vh;
+          min-height: 60vh;
           display: flex;
           flex-direction: column;
           justify-content: center;
+          gap: 2rem;
+          text-align: center;
+          background-color: #162456;
+          color: #fff1f2;
         "
       >
-        <h2 style="text-align: center; display: block">What is Konduit?</h2>
-        <p style="text-align: center">
+        <p style="font-size: 1.5rem">
           Konduit is an open-source, decentralized protocol that provides a
           financial connection from the Cardano ecosystem to the Bitcoin
           ecosystem.
         </p>
-        <p style="text-align: center">
+        <p style="font-size: 1.5rem">
           It allows Ada holders to seamlessly pay for goods and services over
           the Bitcoin Lightning Network, a widely-used instant payment solution.
         </p>
@@ -348,10 +354,10 @@
         id="how-it-works-overview"
         class="content-section"
         style="
-          min-height: 80vh;
+          min-height: 60vh;
           display: flex;
           flex-direction: column;
-          justify-content: center;
+          justify-content: space-around;
         "
       >
         <h2 style="text-align: center; display: block">Overview</h2>
@@ -363,10 +369,7 @@
           The BLN is a network of participants (nodes) connected by payment
           channels (edges). Each channel in the network is "underwritten" by
           locked funds on the Bitcoin L1. Payments follow routes through this
-          network, using a mechanism called
-          <strong>Hashed Timelock Contracts (HTLCs)</strong>. HTLCs make use of
-          "secrets" and "locks" to ensure payments are securely routed: no node
-          in the route will receive funds, without first sending them.
+          network.
         </p>
         <p>
           Konduit is also made up of two party channels, and each channel is
@@ -417,6 +420,14 @@
               the L1. Payments are made on the L2. In a payment, the consumer
               gives the adaptor evidence of funds owed. The adaptor can use this
               evidence to claim funds on the L1.
+            </p>
+            <p>
+              Payments over BLN are made safe by using
+              <strong>Hashed Timelock Contracts (HTLCs)</strong>. HTLCs make use
+              of "secrets" and "locks" to ensure payments are securely routed:
+              no node in the route will receive funds, without first sending
+              them. Konduit uses the same secrets and locks (but a bit
+              differently).
             </p>
           </div>
         </section>
