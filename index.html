@@ -1,0 +1,653 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-M" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Konduit</title>
+
+    <style>
+      @import url("https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&display=swap");
+
+      /* --- Basic Setup --- */
+      html {
+        scroll-behavior: smooth;
+      }
+
+      body {
+        margin: 0;
+        padding: 0;
+        font-family: "JetBrains+Mono", monospace;
+        color: #162456;
+        background: linear-gradient(180deg, #ffffff 0%, #f0f5fa 100%);
+        min-height: 100vh; /* Ensure gradient fills at least the viewport */
+      }
+
+      .app-button-nav {
+        position: fixed;
+        top: 1.5rem;
+        right: 1.5rem;
+        z-index: 1000;
+        display: inline-block;
+        width: 8rem;
+        padding: 0.75rem 1.5rem;
+        background-color: #fff1f2;
+        color: #162456; /* Dark color for light bg */
+        border: 2px solid #162456; /* Dark border */
+        text-decoration: none;
+        font-weight: 700;
+        border-radius: 0;
+        transition: all 0.2s ease;
+        text-align: center;
+      }
+
+      .app-button-nav:hover {
+        background-color: #162456;
+        color: #fff1f2;
+      }
+
+      /* --- Hero Section (Old Main) --- */
+      header#hero {
+        /* Set to 80% viewport height */
+        min-height: 80vh;
+        /* Background image is now here */
+        background: url("./background.png") no-repeat center center/cover fixed;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        text-align: center;
+        padding: 2rem;
+        box-sizing: border-box; /* Include padding in height calculation */
+      }
+
+      .hero-content {
+        background-color: rgba(22, 36, 86, 0.8);
+        color: #fff1f2;
+        border-radius: 100%;
+        aspect-ratio: 1/1;
+        padding: 2rem;
+        max-width: 60ch;
+        width: 100%; /* Ensure it doesn't get too small */
+        display: flex;
+        flex-direction: column;
+        justify-content: center; /* Centered content */
+        align-items: center;
+        box-shadow: 0 0 30px rgba(0, 0, 0, 0.5);
+      }
+
+      #hero h1 {
+        font-size: 4rem;
+        margin-bottom: 0.5rem;
+      }
+
+      #hero h2 {
+        font-size: 1.7rem;
+        font-weight: 400;
+        margin-bottom: 2rem;
+      }
+
+      main {
+        /* This will hold the new sections */
+      }
+
+      .content-section {
+        padding: 4rem 2rem;
+        max-width: 80ch;
+        /* Increased space between sections (was 2rem) */
+        margin: 4rem auto;
+        background-color: #ffffff;
+        /* Removed border-radius (was 10px) */
+        border-radius: 0;
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
+        box-sizing: border-box;
+      }
+
+      .content-section h2 {
+        font-size: 2.5rem;
+        font-weight: 700;
+        margin-bottom: 1.5rem;
+        text-align: center;
+        padding-bottom: 0.5rem;
+        display: inline-block;
+      }
+
+      .content-section p {
+        font-size: 1.1rem;
+        line-height: 1.7;
+        margin-bottom: 1rem;
+      }
+
+      /* (Old OL styles removed) */
+
+      .timeline {
+        position: relative;
+        max-width: 700px; /* Max width of the timeline itself */
+        margin: 2rem auto;
+        padding: 2rem 0;
+      }
+
+      /* The central line */
+      .timeline::after {
+        content: "";
+        position: absolute;
+        width: 4px;
+        background-color: #162456;
+        top: 0;
+        bottom: 0;
+        left: 50%;
+        margin-left: -2px;
+      }
+
+      /* Timeline item container */
+      .timeline-item {
+        padding: 1rem 2.5rem; /* 40px */
+        position: relative;
+        background-color: inherit;
+        width: 50%;
+        box-sizing: border-box; /* Include padding in width */
+      }
+
+      /* The circles on the timeline */
+      .timeline-item::after {
+        content: "";
+        position: absolute;
+        width: 20px;
+        height: 20px;
+        right: -10px; /* (20/2) */
+        background-color: #ffffff;
+        border: 4px solid #162456;
+        top: 2.2rem; /* Adjust to center with content */
+        border-radius: 50%;
+        z-index: 1;
+      }
+
+      /* Left item */
+      .timeline-item.left {
+        left: 0;
+        padding-right: 2.5rem; /* 40px */
+      }
+
+      /* Right item */
+      .timeline-item.right {
+        left: 50%;
+        padding-left: 2.5rem; /* 40px */
+      }
+
+      /* Adjust circle for right item */
+      .timeline-item.right::after {
+        left: -10px;
+      }
+
+      /* Content box */
+      .timeline-content {
+        padding: 1rem 1.5rem;
+        background-color: #f0f5fa; /* A slightly different bg for the box */
+        position: relative;
+        border-radius: 0; /* Keep it 0 as requested */
+        border: 1px solid #162456;
+      }
+
+      .timeline-content h3 {
+        margin-top: 0;
+        font-size: 1.3rem;
+        color: #162456;
+      }
+      .timeline-content p {
+        font-size: 1rem;
+        line-height: 1.6;
+        margin-bottom: 0;
+      }
+
+      .github-link {
+        display: inline-flex; /* Use flex to align icon and text */
+        align-items: center;
+        justify-content: center;
+        /* text-align: center; */ /* Not needed with inline-flex */
+        padding: 0.75rem 1.5rem;
+        background-color: #162456;
+        color: #fff1f2;
+        text-decoration: none;
+        font-weight: 700;
+        transition: all 0.2s ease;
+        margin-top: 1.5rem; /* Space above the button */
+        border: 2px solid #162456;
+      }
+      .github-link:hover {
+        background-color: #f0f5fa; /* Use the light bg color from timeline */
+        color: #162456;
+      }
+      .github-link svg {
+        /* vertical-align: middle; */ /* Not needed with flex */
+        margin-right: 8px;
+      }
+
+      footer {
+        text-align: center;
+        padding: 3rem 2rem;
+        /* margin-top: 4rem; */ /* Removed to connect to section above */
+        /* border-top: 1px solid #dde8f1; */ /* Changed border */
+        border-top: 1px solid #c9d7e3; /* Darker shade for separation */
+        color: #162456;
+        font-size: 0.9rem;
+        line-height: 1.6;
+      }
+      footer .footer-links a {
+        color: #162456;
+        text-decoration: underline;
+        font-weight: 700;
+        margin: 0 0.5rem;
+      }
+      footer .footer-links a:hover {
+        text-decoration: none;
+      }
+      footer .footer-links span {
+        margin: 0 0.25rem;
+        opacity: 0.7;
+      }
+      footer p {
+        margin: 0.5rem 0 0 0;
+        font-size: 0.85rem;
+        opacity: 0.8;
+      }
+
+      /* Responsive adjustments */
+      @media (max-width: 768px) {
+        .app-button-nav {
+          top: 1rem;
+          right: 1rem;
+          width: auto;
+          padding: 0.5rem 1rem;
+          font-size: 0.9rem;
+        }
+        #hero h1 {
+          font-size: 3rem;
+        }
+        #hero h2 {
+          font-size: 1.3rem;
+        }
+        .hero-content {
+          aspect-ratio: auto; /* Break aspect ratio on small screens */
+          border-radius: 20px; /* Use a standard card shape */
+          min-height: 50vh;
+        }
+        .content-section h2 {
+          font-size: 2rem;
+        }
+        .content-section {
+          /* Reduce margin on mobile */
+          margin: 2.5rem auto;
+        }
+
+        /* --- Timeline Responsive --- */
+        /* Hide the central line */
+        .timeline::after {
+          left: 30px;
+        }
+
+        /* Full width items */
+        .timeline-item {
+          width: 100%;
+          padding-left: 60px; /* 30px + 30px */
+          padding-right: 15px;
+        }
+
+        /* All items on the right of the line */
+        .timeline-item.left,
+        .timeline-item.right {
+          left: 0;
+        }
+
+        /* Adjust circles */
+        .timeline-item.left::after,
+        .timeline-item.right::after {
+          left: 20px; /* 30px - (20/2) */
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <a href="/app" class="app-button-nav"> Go to App </a>
+
+    <!-- Hero Section -->
+    <header id="hero">
+      <div class="hero-content">
+        <h1>Konduit</h1>
+        <h2>
+          A <strong>Cardano</strong> to <strong>Bitcoin Lightning</strong> Pipe
+        </h2>
+        <!-- "Go to App" button removed from here -->
+      </div>
+    </header>
+
+    <!-- Main Content Area -->
+    <main>
+      <!-- "What Is" Section -->
+      <section
+        id="what-is"
+        class="content-section"
+        style="
+          min-height: 80vh;
+          display: flex;
+          flex-direction: column;
+          justify-content: center;
+        "
+      >
+        <h2 style="text-align: center; display: block">What is Konduit?</h2>
+        <p style="text-align: center">
+          Konduit is an open-source, decentralized protocol that provides a
+          financial connection from the Cardano ecosystem to the Bitcoin
+          ecosystem.
+        </p>
+        <p style="text-align: center">
+          It allows Ada holders to seamlessly pay for goods and services over
+          the Bitcoin Lightning Network, a widely-used instant payment solution.
+        </p>
+      </section>
+
+      <!-- "How It Works" Section - NOW OVERVIEW -->
+      <section
+        id="how-it-works-overview"
+        class="content-section"
+        style="
+          min-height: 80vh;
+          display: flex;
+          flex-direction: column;
+          justify-content: center;
+        "
+      >
+        <h2 style="text-align: center; display: block">Overview</h2>
+        <p>
+          <!-- Updated Preamble -->
+          Konduit's design is inspired by the Bitcoin Lightning Network (BLN).
+        </p>
+        <p>
+          The BLN is a network of participants (nodes) connected by payment
+          channels (edges). Each channel in the network is "underwritten" by
+          locked funds on the Bitcoin L1. Payments follow routes through this
+          network, using a mechanism called
+          <strong>Hashed Timelock Contracts (HTLCs)</strong>. HTLCs make use of
+          "secrets" and "locks" to ensure payments are securely routed: no node
+          in the route will receive funds, without first sending them.
+        </p>
+        <p>
+          Konduit is also made up of two party channels, and each channel is
+          underwritten by locked funds but now on the Cardano L1. There's
+          another big difference. In Konduit, channels are between a
+          <strong>Consumer</strong> and an <strong>Adaptor</strong>
+          An adaptor is a service provider who also has BLN channels. This means
+          they can route payments from the consumer to BLN.
+        </p>
+
+        <!-- Timeline has been MOVED from here -->
+      </section>
+
+      <!-- Updated: Added linear-gradient background -->
+      <div
+        id="going-deeper"
+        style="
+          padding: 2rem 0;
+          background: linear-gradient(180deg, #f0f5fa 0%, #ccd8e1 100%);
+        "
+      >
+        <section
+          id="how-it-works-overview"
+          class="content-section"
+          style="display: flex; flex-direction: column; justify-content: center"
+        >
+          <div
+            style="
+              max-width: 80ch;
+              margin: 0 auto 2rem auto;
+              text-align: center;
+              padding: 0 2rem;
+            "
+          >
+            <h2 style="text-align: center; display: block">Going Deeper...</h2>
+          </div>
+          <div
+            style="
+              max-width: 80ch;
+              margin: 0 auto 2rem auto;
+              text-align: left;
+              padding: 0 2rem;
+            "
+          >
+            <p>
+              To understand how a Konduit Channel works we need to break it down
+              into two parts: L1 and L2. The funds underwriting a channel are on
+              the L1. Payments are made on the L2. In a payment, the consumer
+              gives the adaptor evidence of funds owed. The adaptor can use this
+              evidence to claim funds on the L1.
+            </p>
+          </div>
+        </section>
+        <!-- "Open Phase" Section -->
+        <!-- Note: This is now a subsection card -->
+        <section id="how-it-works-open" class="content-section">
+          <h2 style="text-align: center; display: block; border: 0">Open</h2>
+          <p>
+            This phase establishes the payment channel between the Consumer and
+            the Adaptor, secured by funds on the Cardano L1.
+          </p>
+          <!-- Timeline Structure (MOVED from overview) -->
+          <div class="timeline">
+            <!-- Item 1: Adaptor (Right) -->
+            <div class="timeline-item right">
+              <div class="timeline-content">
+                <h3>Adaptor</h3>
+                <p>
+                  An Adaptor advertises their services, making themselves
+                  discoverable to Consumers.
+                </p>
+              </div>
+            </div>
+
+            <!-- Item 2: Consumer (Left) -->
+            <div class="timeline-item left">
+              <div class="timeline-content">
+                <h3>Consumer</h3>
+                <p>
+                  A Consumer finds an Adaptor and "opens" a channel by locking
+                  Ada funds on Cardano (L1). These locked funds underwrite all
+                  future "L2" (off-chain) payments.
+                </p>
+              </div>
+            </div>
+
+            <!-- Item 3: Adaptor (Right) -->
+            <div class="timeline-item right">
+              <div class="timeline-content">
+                <h3>Adaptor</h3>
+                <p>
+                  The Adaptor confirms this L1 transaction, verifies the channel
+                  is acceptable, and awaits a message from the Consumer.
+                </p>
+              </div>
+            </div>
+
+            <!-- Item 4: Consumer (Left) -->
+            <div class="timeline-item left">
+              <div class="timeline-content">
+                <h3>Consumer</h3>
+                <p>
+                  The Consumer sends a message to initialize the L2 part of
+                  their channel, making it ready to send payments.
+                </p>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- "Pay Phase" Section - ID and H2 Updated -->
+        <!-- Note: This is now a subsection card -->
+        <section id="how-it-works-pay" class="content-section">
+          <h2 style="text-align: center; display: block; border: 0">Pay</h2>
+          <p>
+            Once the channel is initialized, the Consumer can make payments to
+            any Bitcoin Lightning invoice through their Adaptor.
+          </p>
+
+          <div class="timeline">
+            <!-- Item 1: Consumer (Left) -->
+            <div class="timeline-item left">
+              <div class="timeline-content">
+                <h3>Consumer</h3>
+                <p>
+                  Scans a BLN invoice and requests a quote from their Adaptor to
+                  route the payment.
+                </p>
+              </div>
+            </div>
+
+            <!-- Item 2: Adaptor (Right) -->
+            <div class="timeline-item right">
+              <div class="timeline-content">
+                <h3>Adaptor</h3>
+                <p>
+                  Responds to the quote, confirming if they can route the
+                  payment and specifying the total cost in Ada.
+                </p>
+              </div>
+            </div>
+
+            <!-- Item 3: Consumer (Left) -->
+            <div class="timeline-item left">
+              <div class="timeline-content">
+                <h3>Consumer</h3>
+                <p>
+                  Accepts the quote and sends a locked "cheque" (an L2 payment)
+                  to the Adaptor.
+                </p>
+              </div>
+            </div>
+
+            <!-- Item 4: Adaptor (Right) -->
+            <div class="timeline-item right">
+              <div class="timeline-content">
+                <h3>Adaptor</h3>
+                <p>
+                  Routes the payment on the BLN and receives the proof of
+                  payment (the "secret"), which they send to the Consumer.
+                </p>
+              </div>
+            </div>
+
+            <!-- Item 5: Consumer (Left) -->
+            <div class="timeline-item left">
+              <div class="timeline-content">
+                <h3>Consumer</h3>
+                <p>
+                  Validates the secret and responds with a "squash" message to
+                  finalize the L2 payment with the Adaptor.
+                </p>
+              </div>
+            </div>
+          </div>
+          <p>
+            A "squash"? Its a small piece of evidence that represents the
+            squashing of all the "unlocked" cheques to date. The adaptor can use
+            the squash and unlocked cheques at any time to "sub" funds owed from
+            the L1 channel. Likewise, the consumer can "add" funds to the
+            channel at any time, if they so choose.
+          </p>
+        </section>
+
+        <!-- Note: This is now a subsection card -->
+        <section id="how-it-works-close" class="content-section">
+          <h2 style="text-align: center; display: block; border: 0">Close</h2>
+          <p>
+            This final phase closes the payment channel, settling the final
+            balances on the Cardano L1.
+          </p>
+
+          <div class="timeline">
+            <!-- Item 1: Consumer (Left) -->
+            <div class="timeline-item left">
+              <div class="timeline-content">
+                <h3>Consumer</h3>
+                <p>
+                  Initiates the channel close on L1. Funds remain locked during
+                  this process.
+                </p>
+              </div>
+            </div>
+
+            <!-- Item 2: Adaptor (Right) -->
+            <div class="timeline-item right">
+              <div class="timeline-content">
+                <h3>Adaptor</h3>
+                <p>
+                  Sees the L1 channel state change and stops handling any new
+                  cheques. The Adaptor responds on L1, claiming the final funds
+                  owed to them.
+                </p>
+              </div>
+            </div>
+
+            <!-- Item 3: Consumer (Left) -->
+            <div class="timeline-item left">
+              <div class="timeline-content">
+                <h3>Consumer</h3>
+                <p>
+                  After the Adaptor has claimed their funds, the Consumer ends
+                  the channel and withdraws all remaining funds.
+                </p>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section
+          id="unhappy-path"
+          class="content-section"
+          style="
+            text-align: left;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            border-left: 4px solid #162456;
+          "
+        >
+          <h3 style="text-align: left; display: block; border: 0">
+            ... and what about the unhappy paths
+          </h3>
+          <p>
+            What we've described above is the "happy path," where everything
+            works as expected.
+          </p>
+          <p>
+            At any point, the process might deviate. Konduit is designed to
+            securely manage these unhappy paths, ensuring funds are always safe.
+          </p>
+          <p>
+            For a deeper dive into the protocol and its security model, check
+            out our
+            <a
+              href="https://github.com/cardano-lightning/konduit"
+              target="_blank"
+              rel="noopener noreferrer"
+              >GitHub</a
+            >.
+          </p>
+        </section>
+      </div>
+      <!-- End of "going-deeper" -->
+    </main>
+
+    <footer>
+      <div class="footer-links">
+        <a
+          href="https://cardano-lightning.org"
+          target="_blank"
+          rel="noopener noreferrer"
+          >cardano-lightning.org</a
+        >
+        <span>&bull;</span>
+        <a
+          href="https://github.com/cardano-lightning/konduit"
+          target="_blank"
+          rel="noopener noreferrer"
+          >GitHub</a
+        >
+      </div>
+      <p>&copy; 2025 Konduit</p>
+    </footer>
+  </body>
+</html>
