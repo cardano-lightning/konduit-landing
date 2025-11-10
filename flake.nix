@@ -43,9 +43,8 @@
         pre-commit.settings.hooks = {
           treefmt.enable = true;
         };
-        devShells.default = let
-        in
-          pkgs.mkShell
+        packages.default = pkgs.callPackage ./flake/default.nix {};
+        devShells.default = pkgs.mkShell
           {
             nativeBuildInputs = [
               config.treefmt.build.wrapper
@@ -60,6 +59,8 @@
             ];
           };
       };
-      flake = {};
+      flake = {
+        nixosModules.default = import ./flake/nixos.nix inputs.self;
+      };
     };
 }
