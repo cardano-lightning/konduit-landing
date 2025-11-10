@@ -8,6 +8,7 @@
 
   src = lib.sourceByRegex ../. [
     "^index\\.html$"
+    "^favicon\\.ico$"
     "^background\\.png$"
   ];
 
